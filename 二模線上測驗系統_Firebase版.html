@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veronica 英文班 - 二模線上測驗系統</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Microsoft JhengHei", "微軟正黑體", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .role-selection {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 40px 0;
+        }
+        
+        .role-btn {
+            padding: 30px 50px;
+            font-size: 24px;
+            border: 3px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .role-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .login-form {
+            max-width: 400px;
+            margin: 40px auto;
+            text-align: center;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            font-size: 18px;
+            border: none;
+            background: #667eea;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #95a5a6;
+        }
+        
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+        
+        .quiz-selection {
+            margin: 30px 0;
+        }
+        
+        .quiz-selection select {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .quiz-container {
+            margin-top: 30px;
+        }
+        
+        .question {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .question h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .options {
+            margin-left: 20px;
+        }
+        
+        .options label {
+            display: block;
+            padding: 12px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+        
+        .options label:hover {
+            background: #e8eaf6;
+            transform: translateX(5px);
+        }
+        
+        .options input[type="radio"] {
+            margin-right: 10px;
+        }
+        
+        .dashboard {
+            overflow-x: auto;
+        }
+        
+        .dashboard table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .dashboard th, .dashboard td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        .dashboard th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .dashboard tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .dashboard tr:hover {
+            background: #e8eaf6;
+        }
+        
+        .completed {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .not-completed {
+            color: #95a5a6;
+        }
+        
+        .score {
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .user-info {
+            background: #e8eaf6;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-info span {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .result-summary {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .result-summary h2 {
+            color: #155724;
+            margin-bottom: 10px;
+        }
+        
+        .result-summary p {
+            font-size: 18px;
+            color: #155724;
+        }
+        
+        #studentProgress {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 18px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .role-selection {
+                flex-direction: column;
+            }
+            
+            .role-btn {
+                padding: 20px 30px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 Veronica 英文班 - 二模線上測驗系統</h1>
+            <p>2025 二模衝刺專用 | 共 7 回測驗 | ☁️ 雲端同步</p>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading">
+            <div>🔄 連接雲端資料庫中...</div>
+        </div>
+
+        <!-- Role Selection -->
+        <div id="roleSelection" class="role-selection hidden">
+            <button class="role-btn" onclick="selectRole('teacher')">👩‍🏫 我是老師</button>
+            <button class="role-btn" onclick="selectRole('student')">👨‍🎓 我是學生</button>
+        </div>
+
+        <!-- Student Login -->
+        <div id="studentLogin" class="hidden">
+            <div class="login-form">
+                <h2 style="margin-bottom: 20px; color: #667eea;">學生登入</h2>
+                <input type="text" id="studentName" placeholder="請輸入您的姓名（例如：王小明）">
+                <input type="password" id="studentPassword" placeholder="請輸入密碼">
+                <button class="btn" onclick="studentLogin()">登入</button>
+                <button class="btn btn-secondary" onclick="backToRoleSelection()" style="margin-left: 10px;">返回</button>
+            </div>
+        </div>
+
+        <!-- Student Quiz Interface -->
+        <div id="studentQuiz" class="hidden">
+            <div class="user-info">
+                <span>👨‍🎓 學生：<span id="currentStudent"></span></span>
+                <button class="btn btn-secondary" onclick="studentLogout()">登出</button>
+            </div>
+
+            <!-- Student Progress Display -->
+            <div id="studentProgress" style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 5px solid #667eea;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">📊 我的測驗進度</h3>
+                <div id="progressContent"></div>
+            </div>
+
+            <div class="quiz-selection">
+                <h3 style="margin-bottom: 15px;">選擇測驗回數：</h3>
+                <select id="quizSelect">
+                    <option value="">-- 請選擇 --</option>
+                </select>
+                <button class="btn" onclick="startQuiz()">開始作答</button>
+            </div>
+
+            <div id="quizContent" class="hidden">
+                <div id="quizQuestions"></div>
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn" onclick="submitQuiz()">提交答案</button>
+                </div>
+            </div>
+
+            <div id="quizResult" class="hidden"></div>
+        </div>
+
+        <!-- Teacher Dashboard -->
+        <div id="teacherDashboard" class="hidden">
+            <div class="user-info">
+                <span>👩‍🏫 教師儀表板</span>
+                <button class="btn btn-secondary" onclick="backToRoleSelection()">返回</button>
+            </div>
+
+            <div style="margin: 20px 0; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button class="btn" onclick="refreshDashboard()">🔄 重新整理</button>
+                <button class="btn" onclick="showPasswordModal()" style="background: #ff9800;">🔐 修改學生密碼</button>
+                <button class="btn btn-secondary" onclick="clearAllData()">🗑️ 清空所有資料</button>
+            </div>
+
+            <div class="dashboard">
+                <table id="dashboardTable">
+                    <thead>
+                        <tr>
+                            <th>學生姓名</th>
+                            <th>第 1 回</th>
+                            <th>第 2 回</th>
+                            <th>第 3 回</th>
+                            <th>第 4 回</th>
+                            <th>第 5 回</th>
+                            <th>第 6 回</th>
+                            <th>第 7 回</th>
+                            <th>完成數</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dashboardBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Change Modal -->
+    <div id="passwordModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 style="color: #667eea; margin-bottom: 20px;">🔐 修改學生密碼</h2>
+            <div style="margin: 20px 0;">
+                <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #666;">目前密碼：</label>
+                <input type="text" id="currentPasswordDisplay" readonly style="background: #f0f0f0; padding: 12px; border: 2px solid #ddd; border-radius: 8px; width: 100%; font-size: 16px; font-family: monospace; letter-spacing: 2px;">
+            </div>
+            <div style="margin: 20px 0;">
+                <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #666;">新密碼：</label>
+                <input type="text" id="newPasswordInput" placeholder="請輸入新密碼" style="padding: 12px; border: 2px solid #667eea; border-radius: 8px; width: 100%; font-size: 16px; font-family: monospace; letter-spacing: 2px;">
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 25px;">
+                <button class="btn" onclick="confirmPasswordChange()">✓ 確認修改</button>
+                <button class="btn btn-secondary" onclick="closePasswordModal()">✗ 取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCsNp3nBSrksuo-yWwHYivBMNR4fxaU5-g",
+            authDomain: "mygrade9-31b9f.firebaseapp.com",
+            databaseURL: "https://mygrade9-31b9f-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "mygrade9-31b9f",
+            storageBucket: "mygrade9-31b9f.firebasestorage.app",
+            messagingSenderId: "27536155862",
+            appId: "1:27536155862:web:42e3514e32388faff59577"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        let currentUser = null;
+        let currentQuizNumber = null;
+        let currentAnswers = {};
+        
+        // Password Management
+        const DEFAULT_PASSWORD = '7916600';
+        
+        // Initialize password in Firebase
+        async function initializePassword() {
+            const passwordRef = database.ref('settings/password');
+            const snapshot = await passwordRef.once('value');
+            if (!snapshot.exists()) {
+                await passwordRef.set(DEFAULT_PASSWORD);
+            }
+        }
+        
+        async function getPassword() {
+            const snapshot = await database.ref('settings/password').once('value');
+            return snapshot.val() || DEFAULT_PASSWORD;
+        }
+        
+        async function setPassword(newPassword) {
+            await database.ref('settings/password').set(newPassword);
+        }
+        
+        async function verifyPassword(inputPassword) {
+            const correctPassword = await getPassword();
+            return inputPassword === correctPassword;
+        }
+
+        // Initialize
+        window.onload = async function() {
+            try {
+                await initializePassword();
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('roleSelection').classList.remove('hidden');
+            } catch (error) {
+                console.error('初始化錯誤:', error);
+                document.getElementById('loadingState').innerHTML = `
+                    <div style="color: #dc3545;">
+                        ❌ 連接失敗，請檢查網路連線<br>
+                        <button class="btn" onclick="location.reload()" style="margin-top: 20px;">重新載入</button>
+                    </div>
+                `;
+            }
+        };
+
+        function selectRole(role) {
+            document.getElementById('roleSelection').classList.add('hidden');
+            if (role === 'teacher') {
+                document.getElementById('teacherDashboard').classList.remove('hidden');
+                refreshDashboard();
+            } else {
+                document.getElementById('studentLogin').classList.remove('hidden');
+            }
+        }
+
+        async function studentLogin() {
+            const name = document.getElementById('studentName').value.trim();
+            const password = document.getElementById('studentPassword').value;
+            
+            if (!name) {
+                alert('請輸入姓名！');
+                return;
+            }
+            
+            if (!password) {
+                alert('請輸入密碼！');
+                return;
+            }
+            
+            const isValid = await verifyPassword(password);
+            if (!isValid) {
+                alert('❌ 密碼錯誤！請重新輸入。');
+                document.getElementById('studentPassword').value = '';
+                document.getElementById('studentPassword').focus();
+                return;
+            }
+            
+            currentUser = name;
+            document.getElementById('currentStudent').textContent = name;
+            document.getElementById('studentLogin').classList.add('hidden');
+            document.getElementById('studentQuiz').classList.remove('hidden');
+            
+            // Clear password field for security
+            document.getElementById('studentPassword').value = '';
+            
+            // Display student progress
+            await displayStudentProgress(name);
+        }
+
+        function studentLogout() {
+            currentUser = null;
+            currentQuizNumber = null;
+            currentAnswers = {};
+            document.getElementById('studentQuiz').classList.add('hidden');
+            document.getElementById('quizContent').classList.add('hidden');
+            document.getElementById('quizResult').classList.add('hidden');
+            document.getElementById('studentProgress').innerHTML = '';
+            document.getElementById('roleSelection').classList.remove('hidden');
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentPassword').value = '';
+        }
+
+        function backToRoleSelection() {
+            document.getElementById('studentLogin').classList.add('hidden');
+            document.getElementById('teacherDashboard').classList.add('hidden');
+            document.getElementById('roleSelection').classList.remove('hidden');
+        }
+
+        async function populateQuizSelect() {
+            const select = document.getElementById('quizSelect');
+            select.innerHTML = '<option value="">-- 請選擇 --</option>';
+            
+            let studentData = null;
+            if (currentUser) {
+                const snapshot = await database.ref(`quizData/${currentUser}`).once('value');
+                studentData = snapshot.val();
+            }
+            
+            for (let i = 1; i <= 7; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `第 ${i} 回`;
+                
+                if (!allQuizzes[i]) {
+                    option.textContent += ' (尚未開放)';
+                    option.disabled = true;
+                } else if (studentData && studentData[i]) {
+                    option.textContent += ` ✓ (已完成 ${studentData[i].score}分)`;
+                }
+                
+                select.appendChild(option);
+            }
+        }
+        
+        async function displayStudentProgress(studentName) {
+            const snapshot = await database.ref(`quizData/${studentName}`).once('value');
+            const studentData = snapshot.val() || {};
+            const progressDiv = document.getElementById('progressContent');
+            
+            let completedCount = 0;
+            let completedList = [];
+            let notCompletedList = [];
+            
+            for (let i = 1; i <= 7; i++) {
+                if (allQuizzes[i]) {
+                    if (studentData[i]) {
+                        completedCount++;
+                        completedList.push(`<span style="color: #28a745; font-weight: bold;">第 ${i} 回 ✓ (${studentData[i].score}分)</span>`);
+                    } else {
+                        notCompletedList.push(`<span style="color: #6c757d;">第 ${i} 回</span>`);
+                    }
+                }
+            }
+            
+            let html = `
+                <div style="margin-bottom: 15px;">
+                    <strong style="font-size: 18px; color: #667eea;">總進度：${completedCount} / 7 回</strong>
+                    <div style="background: #e9ecef; height: 20px; border-radius: 10px; margin-top: 8px; overflow: hidden;">
+                        <div style="background: linear-gradient(90deg, #667eea, #764ba2); height: 100%; width: ${(completedCount/7)*100}%; transition: width 0.3s;"></div>
+                    </div>
+                </div>
+            `;
+            
+            if (completedList.length > 0) {
+                html += `
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #28a745;">✅ 已完成：</strong><br>
+                        <div style="margin-top: 8px; display: flex; flex-wrap: wrap; gap: 10px;">
+                            ${completedList.join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            if (notCompletedList.length > 0) {
+                html += `
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #667eea;">📝 尚未完成：</strong><br>
+                        <div style="margin-top: 8px; display: flex; flex-wrap: wrap; gap: 10px;">
+                            ${notCompletedList.join('')}
+                        </div>
+                    </div>
+                `;
+                
+                const nextQuiz = completedCount + 1;
+                if (nextQuiz && nextQuiz <= 7) {
+                    html += `
+                        <div style="background: #fff3cd; padding: 12px; border-radius: 8px; margin-top: 15px; border: 2px solid #ffc107;">
+                            <strong style="color: #856404;">💡 建議：</strong>
+                            <span style="color: #856404;">從「第 ${nextQuiz} 回」開始作答</span>
+                        </div>
+                    `;
+                }
+            } else {
+                html += `
+                    <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center;">
+                        <strong style="color: #155724; font-size: 18px;">🎉 恭喜！已完成所有測驗！</strong>
+                        <p style="color: #155724; margin-top: 8px;">你可以重新作答來複習喔</p>
+                    </div>
+                `;
+            }
+            
+            progressDiv.innerHTML = html;
+            await populateQuizSelect();
+        }
+
+        function startQuiz() {
+            const quizNum = parseInt(document.getElementById('quizSelect').value);
+            if (!quizNum) {
+                alert('請選擇測驗回數！');
+                return;
+            }
+            if (!allQuizzes[quizNum]) {
+                alert('此回測驗尚未開放！');
+                return;
+            }
+            
+            currentQuizNumber = quizNum;
+            currentAnswers = {};
+            displayQuiz(quizNum);
+        }
+
+        function displayQuiz(quizNum) {
+            const quiz = allQuizzes[quizNum];
+            const container = document.getElementById('quizQuestions');
+            container.innerHTML = `<h2 style="color: #667eea; margin-bottom: 25px;">${quiz.title}</h2>`;
+            
+            quiz.questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <h3>第 ${index + 1} 題：${q.question}</h3>
+                    <div class="options">
+                        ${q.options.map((opt, optIndex) => `
+                            <label>
+                                <input type="radio" name="q${index}" value="${optIndex}" onchange="saveAnswer(${index}, ${optIndex})">
+                                ${String.fromCharCode(65 + optIndex)}. ${opt}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+            
+            document.getElementById('quizContent').classList.remove('hidden');
+            document.getElementById('quizResult').classList.add('hidden');
+        }
+
+        function saveAnswer(questionIndex, answerIndex) {
+            currentAnswers[questionIndex] = answerIndex;
+        }
+
+        async function submitQuiz() {
+            const quiz = allQuizzes[currentQuizNumber];
+            const totalQuestions = quiz.questions.length;
+            
+            if (Object.keys(currentAnswers).length < totalQuestions) {
+                if (!confirm('尚有題目未作答，確定要提交嗎？')) {
+                    return;
+                }
+            }
+            
+            let correctCount = 0;
+            let detailedResults = '';
+            
+            quiz.questions.forEach((q, index) => {
+                const userAnswer = currentAnswers[index];
+                const isCorrect = userAnswer === q.answer;
+                
+                if (isCorrect) {
+                    correctCount++;
+                    detailedResults += `
+                        <div style="background: #d4edda; border-left: 5px solid #28a745; padding: 15px; margin: 15px 0; border-radius: 8px;">
+                            <strong style="color: #155724;">✓ 第 ${index + 1} 題：正確</strong>
+                            <p style="color: #155724; margin-top: 8px;">${q.question}</p>
+                            <p style="color: #155724; margin-top: 5px;">你的答案：${String.fromCharCode(65 + userAnswer)}. ${q.options[userAnswer]}</p>
+                        </div>
+                    `;
+                } else {
+                    detailedResults += `
+                        <div style="background: #f8d7da; border-left: 5px solid #dc3545; padding: 15px; margin: 15px 0; border-radius: 8px;">
+                            <strong style="color: #721c24;">✗ 第 ${index + 1} 題：錯誤</strong>
+                            <p style="color: #721c24; margin-top: 8px;">${q.question}</p>
+                            <p style="color: #721c24; margin-top: 5px;">
+                                你的答案：${userAnswer !== undefined ? String.fromCharCode(65 + userAnswer) + '. ' + q.options[userAnswer] : '未作答'}
+                            </p>
+                            <p style="color: #155724; margin-top: 5px; font-weight: bold;">
+                                ✓ 正確答案：${String.fromCharCode(65 + q.answer)}. ${q.options[q.answer]}
+                            </p>
+                            <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 12px; margin-top: 10px; border-radius: 5px;">
+                                <strong style="color: #856404;">💡 解析：</strong>
+                                <p style="color: #856404; margin-top: 5px;">${q.explanation}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            const score = Math.round((correctCount / totalQuestions) * 100);
+            
+            // Save to Firebase
+            await saveQuizResult(currentUser, currentQuizNumber, score, correctCount, totalQuestions);
+            
+            // Display result
+            document.getElementById('quizContent').classList.add('hidden');
+            const resultDiv = document.getElementById('quizResult');
+            resultDiv.className = '';
+            resultDiv.innerHTML = `
+                <div class="result-summary">
+                    <h2>✅ 測驗完成！</h2>
+                    <p style="font-size: 24px; margin: 15px 0;">
+                        答對：${correctCount} / ${totalQuestions} 題
+                    </p>
+                    <p class="score" style="font-size: 32px;">
+                        分數：${score} 分
+                    </p>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h3 style="color: #667eea; margin-bottom: 20px; text-align: center;">📝 詳細答題結果</h3>
+                    ${detailedResults}
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn" onclick="backToQuizSelection()">返回測驗選單</button>
+                </div>
+            `;
+            resultDiv.classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        async function backToQuizSelection() {
+            document.getElementById('quizResult').classList.add('hidden');
+            document.getElementById('quizSelect').value = '';
+            currentQuizNumber = null;
+            currentAnswers = {};
+            
+            if (currentUser) {
+                await displayStudentProgress(currentUser);
+            }
+        }
+
+        async function saveQuizResult(studentName, quizNumber, score, correct, total) {
+            await database.ref(`quizData/${studentName}/${quizNumber}`).set({
+                score: score,
+                correct: correct,
+                total: total,
+                timestamp: new Date().toLocaleString('zh-TW')
+            });
+        }
+
+        async function refreshDashboard() {
+            const snapshot = await database.ref('quizData').once('value');
+            const data = snapshot.val() || {};
+            const tbody = document.getElementById('dashboardBody');
+            tbody.innerHTML = '';
+            
+            if (Object.keys(data).length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: #999; padding: 30px;">尚無學生作答記錄</td></tr>';
+                return;
+            }
+            
+            for (const [studentName, quizzes] of Object.entries(data)) {
+                const row = document.createElement('tr');
+                let completedCount = 0;
+                
+                let html = `<td style="font-weight: bold;">${studentName}</td>`;
+                
+                for (let i = 1; i <= 7; i++) {
+                    if (quizzes[i]) {
+                        html += `<td class="completed">✓<br><span class="score">${quizzes[i].score}分</span></td>`;
+                        completedCount++;
+                    } else {
+                        html += `<td class="not-completed">-</td>`;
+                    }
+                }
+                
+                html += `<td><strong>${completedCount}/7</strong></td>`;
+                row.innerHTML = html;
+                tbody.appendChild(row);
+            }
+        }
+
+        async function clearAllData() {
+            if (confirm('確定要清空所有資料嗎？此操作無法復原！')) {
+                if (confirm('再次確認：真的要刪除所有學生的作答記錄嗎？')) {
+                    await database.ref('quizData').remove();
+                    await refreshDashboard();
+                    alert('所有資料已清空！');
+                }
+            }
+        }
+        
+        // Password Modal Functions
+        async function showPasswordModal() {
+            const currentPassword = await getPassword();
+            document.getElementById('currentPasswordDisplay').value = currentPassword;
+            document.getElementById('newPasswordInput').value = '';
+            document.getElementById('passwordModal').classList.remove('hidden');
+        }
+        
+        function closePasswordModal() {
+            document.getElementById('passwordModal').classList.add('hidden');
+            document.getElementById('newPasswordInput').value = '';
+        }
+        
+        async function confirmPasswordChange() {
+            const newPassword = document.getElementById('newPasswordInput').value.trim();
+            
+            if (!newPassword) {
+                alert('請輸入新密碼！');
+                return;
+            }
+            
+            if (newPassword.length < 4) {
+                alert('密碼太短！請至少輸入 4 個字元。');
+                return;
+            }
+            
+            if (confirm(`確定要將密碼改為「${newPassword}」嗎？\n\n改完後所有學生都必須使用新密碼登入。`)) {
+                await setPassword(newPassword);
+                closePasswordModal();
+                alert(`✅ 密碼已成功修改為：${newPassword}\n\n請通知學生使用新密碼登入。`);
+            }
+        }
+        
+        // Close modal when clicking outside
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('passwordModal');
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        closePasswordModal();
+                    }
+                });
+            }
+        });
+
+        // Quiz Data - Veronica 英文班二模測驗題目
+        const allQuizzes = {
+            1: {
+                title: "第一回測驗",
+                questions: [
+                    {
+                        question: "Her words are like ______. All my trouble will go away right after listening to her.",
+                        options: ["air", "bread", "heat", "magic"],
+                        answer: 3,
+                        explanation: "magic（魔法）符合語境，表示她的話像魔法一樣能讓煩惱消失。air（空氣）、bread（麵包）、heat（熱）都不符合「讓煩惱消失」的意思。"
+                    },
+                    {
+                        question: "It's good to ______ your classmates, but don't try to please everybody. Just be yourself.",
+                        options: ["be afraid", "get along with", "look into", "turn around"],
+                        answer: 1,
+                        explanation: "get along with 表示「與...相處融洽」，符合句意。be afraid（害怕）、look into（調查）、turn around（轉身）都不符合語境。"
+                    },
+                    {
+                        question: "Jason worked too late. When he arrived, the party was ______. Everybody left.",
+                        options: ["bright", "deep", "over", "top"],
+                        answer: 2,
+                        explanation: "over 表示「結束了」，後面說 everybody left（大家都離開了）證實派對已結束。bright（明亮的）、deep（深的）、top（頂端）都不符合。"
+                    },
+                    {
+                        question: "Nancy didn't know the water was hot, and she put her hands in it. She ______ her hands.",
+                        options: ["asked", "burnt", "opened", "lent"],
+                        answer: 1,
+                        explanation: "burnt（燙傷）符合語境：把手放進熱水會燙傷。asked（詢問）、opened（打開）、lent（借出）都不合理。"
+                    },
+                    {
+                        question: "All my family ______, my parents, uncles, aunts and cousins, were at the party to celebrate my grandma's birthday.",
+                        options: ["envelopes", "members", "neighbors", "programs"],
+                        answer: 1,
+                        explanation: "family members 表示「家庭成員」，後面列舉的都是家人。envelopes（信封）、neighbors（鄰居）、programs（節目）都不符合。"
+                    },
+                    {
+                        question: "Denny got a ______ for running a red light again. He should follow traffic rules, or he might get hurt.",
+                        options: ["grade", "habit", "ride", "ticket"],
+                        answer: 3,
+                        explanation: "ticket 表示「罰單」，闖紅燈會收到罰單。grade（成績）、habit（習慣）、ride（騎乘）都不符合。"
+                    },
+                    {
+                        question: "Joyce broke the window again. We must ______ that to Mr. Smith right now.",
+                        options: ["lie", "share", "report", "wave"],
+                        answer: 2,
+                        explanation: "report 表示「報告、回報」，打破窗戶應該要報告給史密斯先生。lie（說謊）、share（分享）、wave（揮手）都不適合。"
+                    },
+                    {
+                        question: "Joan: Do you usually ______ for vegetables in the supermarket? Helen: No, I like it better at the market.",
+                        options: ["dig", "wait", "prepare", "shop"],
+                        answer: 3,
+                        explanation: "shop for 表示「購買」，shop for vegetables 是「買菜」。dig（挖）、wait（等待）、prepare（準備）都不符合語境。"
+                    },
+                    {
+                        question: "Edda: Oh! This machine is driving me crazy! Brad: ______ I take a look? Edda: Yes, please.",
+                        options: ["Am", "Do", "May", "Will"],
+                        answer: 2,
+                        explanation: "May I...? 表示禮貌地請求許可「我可以...嗎？」。Am/Do 不能這樣用，Will I 表示未來但不夠禮貌。"
+                    },
+                    {
+                        question: "I actually didn't like the taste of the food, ______ I still made myself eat some to be polite.",
+                        options: ["and", "because", "but", "or"],
+                        answer: 2,
+                        explanation: "but 表示轉折「但是」：雖然不喜歡但還是吃了（為了禮貌）。and（和）、because（因為）、or（或者）都不符合轉折語意。"
+                    },
+                    {
+                        question: "Sue: Is there a dog ______ the gray car and the red car? Jay: Yes, it is sleeping there.",
+                        options: ["between", "next", "in front of", "at"],
+                        answer: 0,
+                        explanation: "between 表示「在...之間（兩者）」，between A and B 是固定用法。next 後面要加 to，in front of 和 at 都不符合「兩車之間」的意思。"
+                    }
+                ]
+            },
+            2: {
+                title: "第二回測驗",
+                questions: [
+                    {
+                        question: "I already finished painting the room, and now we wait for it to ______ before moving things in.",
+                        options: ["arrive", "cool", "dry", "light"],
+                        answer: 2,
+                        explanation: "dry 表示「乾」，油漆完要等它乾了才能搬東西進去。arrive（到達）、cool（冷卻）、light（點亮）都不符合。"
+                    },
+                    {
+                        question: "Abby: How much is the dress? Clerk: $3,000. Abby: I can't buy clothes that ______. Over $1,000 is already too much for me.",
+                        options: ["short", "pretty", "bright", "expensive"],
+                        answer: 3,
+                        explanation: "expensive 表示「昂貴的」，後面說超過 $1,000 太多，所以是指價格貴。short（短的）、pretty（漂亮的）、bright（明亮的）都不符合。"
+                    },
+                    {
+                        question: "The fruit farmer was so sad when he saw the apple ______ all over the ground after the typhoon.",
+                        options: ["attack", "collect", "drop", "shake"],
+                        answer: 2,
+                        explanation: "drop 表示「掉落」，颱風後蘋果掉滿地。attack（攻擊）、collect（收集）、shake（搖晃）都不符合「掉在地上」的意思。"
+                    },
+                    {
+                        question: "If you want people to ______ you well, be nice to them first, and they'll do the same to you.",
+                        options: ["treat", "raise", "know", "notice"],
+                        answer: 0,
+                        explanation: "treat 表示「對待」，treat someone well 是「善待某人」。raise（舉起、養育）、know（知道）、notice（注意到）都不符合。"
+                    },
+                    {
+                        question: "After the big earthquake, Simon lost many of his close ______ like his cousins and uncles. He didn't know how to face it.",
+                        options: ["classmates", "neighbors", "relatives", "workers"],
+                        answer: 2,
+                        explanation: "relatives 表示「親戚」，後面列舉的 cousins（表兄弟姊妹）和 uncles（叔叔伯伯）都是親戚。classmates（同學）、neighbors（鄰居）、workers（工人）都不符合。"
+                    },
+                    {
+                        question: "Ms. Cheng ______ walked into the classroom. She is in the classroom for less than one minute.",
+                        options: ["also", "just", "often", "really"],
+                        answer: 1,
+                        explanation: "just 表示「剛剛、才」，符合「進教室不到一分鐘」的時間點。also（也）、often（經常）、really（真的）都不符合剛發生的意思。"
+                    },
+                    {
+                        question: "It's dark for you to study here. Please push the ______ to turn on the lights.",
+                        options: ["button", "gate", "key", "window"],
+                        answer: 0,
+                        explanation: "button 表示「按鈕」，開燈要按按鈕。gate（門）、key（鑰匙）、window（窗戶）都不是用來開燈的。"
+                    },
+                    {
+                        question: "You may choose to hurry up and ride in my car ______ to take your time and go by yourself.",
+                        options: ["so", "or", "but", "and"],
+                        answer: 1,
+                        explanation: "or 表示「或者」，表示兩個選擇：搭我的車或自己走。so（所以）、but（但是）、and（和）都不符合「二選一」的語意。"
+                    },
+                    {
+                        question: "When Nancy was young, she ______ basketball every morning on the weekend.",
+                        options: ["is playing", "plays", "played", "will play"],
+                        answer: 2,
+                        explanation: "when Nancy was young 表示過去的時間，所以要用過去簡單式 played。is playing（現在進行式）、plays（現在簡單式）、will play（未來式）都不符合過去時態。"
+                    },
+                    {
+                        question: "Lisa: Do you often walk home after school? Tony: Yes, I ______ go home on foot except for rainy days.",
+                        options: ["usually", "sometimes", "seldom", "never"],
+                        answer: 0,
+                        explanation: "usually 表示「通常」，符合 often 的語意，除了雨天都走路回家。sometimes（有時）頻率太低，seldom（很少）和 never（從不）與 Yes 矛盾。"
+                    },
+                    {
+                        question: "Here ______. Wow! I can't wait to enjoy our food!",
+                        options: ["comes our order", "our order comes", "are they", "you go"],
+                        answer: 0,
+                        explanation: "倒裝句型：Here/There + V + S。表示「來了」要說 Here comes our order。our order comes 不倒裝、are they 和 you go 都不符合用法。"
+                    }
+                ]
+            },
+            3: {
+                title: "第三回測驗",
+                questions: [
+                    {
+                        question: "I took my dirty shoes off before entering her apartment in order not to ______ the clean floor.",
+                        options: ["dry", "mark", "pick", "walk"],
+                        answer: 1,
+                        explanation: "mark 表示「弄髒、留下痕跡」，脫掉髒鞋是為了不弄髒乾淨的地板。dry（弄乾）、pick（撿）、walk（走）都不符合。"
+                    },
+                    {
+                        question: "Stop worrying. You won't work all by yourself. We'll work as a ______.",
+                        options: ["case", "kind", "subject", "team"],
+                        answer: 3,
+                        explanation: "work as a team 表示「團隊合作」，不會一個人工作。case（案例）、kind（種類）、subject（科目）都不符合。"
+                    },
+                    {
+                        question: "Although you ______ your voice, the old man still can't hear you.",
+                        options: ["lose", "find", "raise", "test"],
+                        answer: 2,
+                        explanation: "raise your voice 表示「提高音量」，即使提高音量老人還是聽不見。lose（失去）、find（找到）、test（測試）都不符合。"
+                    },
+                    {
+                        question: "Before I flew to Taiwan, Brenda gave me some ______ about the best places to visit, like Taipei 101, Kenting, and Hualien.",
+                        options: ["menus", "circles", "tips", "masks"],
+                        answer: 2,
+                        explanation: "tips 表示「建議、小提示」，give someone tips 是「給某人建議」。menus（菜單）、circles（圓圈）、masks（面具）都不符合。"
+                    },
+                    {
+                        question: "The girl is not tall enough to ______ the cups on the refrigerator. Please help her with that.",
+                        options: ["carry", "drop", "reach", "wash"],
+                        answer: 2,
+                        explanation: "reach 表示「拿到、夠得到」，女孩不夠高拿不到冰箱上的杯子。carry（攜帶）、drop（掉落）、wash（洗）都不符合「夠得到」的意思。"
+                    },
+                    {
+                        question: "We all ______ doing something great when we were little. If you still feel like doing it, start making plans for it.",
+                        options: ["tidied up", "dealt with", "dreamed about", "turned on"],
+                        answer: 2,
+                        explanation: "dream about 表示「夢想、想像」，小時候都會夢想做偉大的事。tidy up（整理）、deal with（處理）、turn on（打開）都不符合。"
+                    },
+                    {
+                        question: "We did not enjoy the trip to Ilan ______ there was a big typhoon on our second day there.",
+                        options: ["until", "before", "although", "because"],
+                        answer: 3,
+                        explanation: "because 表示「因為」，說明原因：因為第二天有颱風所以旅行不愉快。until（直到）、before（在...之前）、although（雖然）都不符合因果關係。"
+                    },
+                    {
+                        question: "He didn't say ______ about his date with Kim, so I guess it probably didn't go quite well.",
+                        options: ["some", "little", "many", "much"],
+                        answer: 3,
+                        explanation: "much 與不可數名詞連用，在否定句中表示「很多」。didn't say much 表示「沒說什麼」。some 用於肯定句，little 和 many 用法都不對。"
+                    },
+                    {
+                        question: "Sue: When is the concert? Bob: It's ______ Friday evening.",
+                        options: ["at", "on", "in", "between"],
+                        answer: 1,
+                        explanation: "on 用於特定的日期或星期幾，on Friday evening 表示「在星期五晚上」。at 用於時刻，in 用於月份或年份，between 表示之間。"
+                    },
+                    {
+                        question: "Joe: Hey, I just borrowed some books from the library. May: Any interesting ______?",
+                        options: ["ones", "others", "those", "them"],
+                        answer: 0,
+                        explanation: "ones 代替前面提到的可數名詞複數 books，any interesting ones 表示「有任何有趣的（書）嗎？」。others 表示「其他的」、those 和 them 都不符合語境。"
+                    },
+                    {
+                        question: "Look at the beautiful shoes! I think you'll look great in ______.",
+                        options: ["it", "that", "they", "them"],
+                        answer: 3,
+                        explanation: "them 是受格代名詞，代替 shoes（複數）。in them 表示「穿著它們」。it 是單數，that 不用在這個語境，they 是主格不能放在介系詞後。"
+                    }
+                ]
+            },
+            4: {
+                title: "第四回測驗",
+                questions: [
+                    {
+                        question: "For Alice, getting into a good high school is on the ______ of her list. Nothing else matters more to her.",
+                        options: ["call", "move", "top", "line"],
+                        answer: 2,
+                        explanation: "on the top of the list 表示「在清單的最上面」，即最重要的事。call（呼叫）、move（移動）、line（線）都不符合。"
+                    },
+                    {
+                        question: "To ______ money to buy a house, Sandy takes a bus to work, but not a taxi. Besides, she seldom buys clothes or eats at restaurants.",
+                        options: ["borrow", "save", "plan", "check"],
+                        answer: 1,
+                        explanation: "save money 表示「存錢、省錢」，為了存錢買房所以搭公車而不是計程車。borrow（借）、plan（計畫）、check（檢查）都不符合。"
+                    },
+                    {
+                        question: "Alice: Are you going to Flora's birthday party? Rick: Sure. ______ me in. Alice: OK. Then we'll have fifteen people in total.",
+                        options: ["Count", "Drop", "Pick", "Send"],
+                        answer: 0,
+                        explanation: "count me in 表示「算我一個、把我算進去」。drop（丟下）、pick（撿）、send（寄送）都不符合。"
+                    },
+                    {
+                        question: "I want to give Lisa something very special for her birthday, not those ______ like flowers or cakes.",
+                        options: ["common", "excellent", "large", "ugly"],
+                        answer: 0,
+                        explanation: "common 表示「普通的、常見的」，花和蛋糕是常見的禮物。excellent（優秀的）、large（大的）、ugly（醜的）都不符合語境。"
+                    },
+                    {
+                        question: "At the shoe shop, I ______ more than ten pairs of shoes but still couldn't find a nice one.",
+                        options: ["dealt with", "handed in", "sold out", "tried on"],
+                        answer: 3,
+                        explanation: "try on 表示「試穿」，在鞋店試穿鞋子。deal with（處理）、hand in（交出）、sell out（賣光）都不符合。"
+                    },
+                    {
+                        question: "We will keep all your ______ for fifty years. You can check them anytime.",
+                        options: ["files", "meetings", "mistakes", "sentences"],
+                        answer: 0,
+                        explanation: "files 表示「檔案、文件」，可以保存和隨時查看。meetings（會議）、mistakes（錯誤）、sentences（句子）都不太合理保存 50 年。"
+                    },
+                    {
+                        question: "Train Number 1155 ______ the train station in two minutes. Please hurry if you want to take this train.",
+                        options: ["left", "leaves", "was leaving", "is leaving"],
+                        answer: 3,
+                        explanation: "is leaving 是現在進行式表示即將發生的未來動作，in two minutes（兩分鐘後）表示即將離開。left 是過去式，leaves 是現在簡單式但不夠強調即將發生，was leaving 是過去進行式。"
+                    },
+                    {
+                        question: "It will ______ Scott about half a day to clean his new house because it is large and has two gardens.",
+                        options: ["make", "spend", "cost", "take"],
+                        answer: 3,
+                        explanation: "It takes someone + 時間 + to V 是固定句型，表示「做某事花費某人多少時間」。make、spend、cost 都不用在這個句型。"
+                    },
+                    {
+                        question: "Making new friends from different countries ______ you know more about the world.",
+                        options: ["help", "to help", "helps", "helping"],
+                        answer: 2,
+                        explanation: "動名詞（Making...）當主詞視為單數，動詞要用第三人稱單數 helps。help 是原形，to help 是不定詞，helping 是現在分詞，都不符合。"
+                    },
+                    {
+                        question: "Clara: Gary. Gary! Gary!! Gary: Oh, hi, Clara. Sorry. I didn't hear you because I ______ about something then.",
+                        options: ["was thinking", "will think", "think", "am thinking"],
+                        answer: 0,
+                        explanation: "then 表示過去某個時間點，要用過去進行式 was thinking 表示「那時正在想事情」。will think（未來）、think（現在簡單式）、am thinking（現在進行式）都不符合過去時態。"
+                    },
+                    {
+                        question: "James kept ______ in the meeting, so Miss Wang was very angry and told him to stop it.",
+                        options: ["talked", "to talk", "talking", "talk"],
+                        answer: 2,
+                        explanation: "keep + V-ing 表示「持續做某事」，keep talking 是「一直講話」。talked 是過去式，to talk 是不定詞，talk 是原形，都不符合 keep 的用法。"
+                    }
+                ]
+            },
+            5: {
+                title: "第五回測驗",
+                questions: [
+                    {
+                        question: "It's really ______. I put a hamburger here before I answered the phone call, but I can't find it now.",
+                        options: ["polite", "national", "strange", "stupid"],
+                        answer: 2,
+                        explanation: "strange 表示「奇怪的」，漢堡放著後來找不到了很奇怪。polite（有禮貌的）、national（國家的）、stupid（愚蠢的）都不符合。"
+                    },
+                    {
+                        question: "To pass the driving test, you must be able to read all the road ______ to keep yourself and others safe.",
+                        options: ["corners", "maps", "signs", "trips"],
+                        answer: 2,
+                        explanation: "road signs 表示「交通標誌」，考駕照要能看懂交通標誌。corners（角落）、maps（地圖）、trips（旅行）都不符合。"
+                    },
+                    {
+                        question: "The boy practiced a lot for the race and won a(n) ______.",
+                        options: ["angle", "bath", "hope", "prize"],
+                        answer: 3,
+                        explanation: "prize 表示「獎品、獎項」，比賽獲勝會得獎。angle（角度）、bath（洗澡）、hope（希望）都不符合。"
+                    },
+                    {
+                        question: "Hank: Are you sure you want to take a taxi home yourself? Kate: Don't worry. I'll call you when I ______ home.",
+                        options: ["get", "will get", "got", "was getting"],
+                        answer: 0,
+                        explanation: "when 引導的時間副詞子句用現在簡單式代替未來式，所以用 get。will get（未來式）不能用在 when 子句中，got 和 was getting 是過去式，都不符合。"
+                    },
+                    {
+                        question: "Tina: How was the movie? Ben: Pretty good, but it was long. I spent four hours ______ it.",
+                        options: ["watch", "to watch", "watched", "watching"],
+                        answer: 3,
+                        explanation: "spend + 時間 + V-ing 表示「花時間做某事」，所以用 watching。watch（原形）、to watch（不定詞）、watched（過去式）都不符合 spend 的用法。"
+                    },
+                    {
+                        question: "The pop singer has several famous cars, and the blue ______ is the oldest.",
+                        options: ["it", "that", "one", "ones"],
+                        answer: 2,
+                        explanation: "one 代替前面提到的單數可數名詞 car，the blue one 表示「那輛藍色的（車）」。it 會指特定的車，that 和 ones（複數）都不符合。"
+                    },
+                    {
+                        question: "Answering those math questions ______ really difficult for me, so I need some help from my teacher.",
+                        options: ["be", "is", "are", "being"],
+                        answer: 1,
+                        explanation: "動名詞（Answering...）當主詞視為單數，動詞要用單數 is。be 是原形，are 是複數，being 是現在分詞，都不符合。"
+                    }
+                ]
+            },
+            6: {
+                title: "第六回測驗",
+                questions: [
+                    {
+                        question: "When I asked Iris out, she gave me a(n) ______ look and walked away. I guess it meant no.",
+                        options: ["bright", "cold", "excited", "warm"],
+                        answer: 1,
+                        explanation: "cold look 表示「冷淡的眼神」，表示拒絕。bright（明亮的）、excited（興奮的）、warm（溫暖的）都是正面的，不符合被拒絕的語境。"
+                    },
+                    {
+                        question: "Zac: Which King or Queen ______ England the longest? Pam: Queen Elizabeth, for over seventy years.",
+                        options: ["attacked", "defined", "ruled", "watched"],
+                        answer: 2,
+                        explanation: "rule 表示「統治」，哪位國王或女王統治英國最久。attack（攻擊）、define（定義）、watch（觀看）都不符合。"
+                    },
+                    {
+                        question: "Nancy is good at writing. She has a good ______ of becoming a famous writer someday.",
+                        options: ["moment", "chance", "voice", "language"],
+                        answer: 1,
+                        explanation: "have a good chance of 表示「有很好的機會」。moment（時刻）、voice（聲音）、language（語言）都不符合。"
+                    },
+                    {
+                        question: "Anna is going to take a trip to Italy this Friday. Does she go for business or for ______?",
+                        options: ["pleasure", "reason", "chalk", "years"],
+                        answer: 0,
+                        explanation: "for pleasure 表示「為了娛樂、休閒」，與 for business（為了商務）相對。reason（理由）、chalk（粉筆）、years（年）都不符合。"
+                    },
+                    {
+                        question: "Leo stayed up working until very late these days, so he spent most of his time ______ in bed on the weekend.",
+                        options: ["lying", "falling", "digging", "hurting"],
+                        answer: 0,
+                        explanation: "lying 表示「躺著」，熬夜工作後週末都在床上躺著休息。falling（掉落）、digging（挖）、hurting（受傷）都不符合。"
+                    },
+                    {
+                        question: "Waiter: Sir, may I take your order now? Mr. Miller: You have a long menu of over 100 ______. It's hard for me to decide on my favorite dish.",
+                        options: ["items", "plates", "tricks", "words"],
+                        answer: 0,
+                        explanation: "items 表示「項目、品項」，菜單上有超過 100 個品項。plates（盤子）、tricks（技巧）、words（字）都不符合。"
+                    },
+                    {
+                        question: "Excuse me. Could you please wipe our table ______ first and then take our order?",
+                        options: ["blank", "clean", "new", "safe"],
+                        answer: 1,
+                        explanation: "wipe...clean 表示「擦乾淨」，要求服務生先把桌子擦乾淨。blank（空白的）、new（新的）、safe（安全的）都不符合。"
+                    },
+                    {
+                        question: "The girl is heavy and not healthy, so her doctor wanted her to ______ snacks. She should eat less between meals.",
+                        options: ["blow out", "cut down on", "be hungry for", "get along with"],
+                        answer: 1,
+                        explanation: "cut down on 表示「減少」，醫生要她減少吃零食。blow out（吹熄）、be hungry for（渴望）、get along with（相處）都不符合。"
+                    },
+                    {
+                        question: "Pan: Wow! Look at all these buttons of different shapes and colors! Are they for special use? Cindy: No, I just enjoy ______ them.",
+                        options: ["boiling", "collecting", "moving", "selling"],
+                        answer: 1,
+                        explanation: "collect 表示「收集」，enjoy collecting 是「喜歡收集」。boiling（煮沸）、moving（移動）、selling（販賣）都不符合語境。"
+                    },
+                    {
+                        question: "______ of my classmates are going to summer camps abroad. How about yours?",
+                        options: ["One", "Much", "Several", "A little"],
+                        answer: 2,
+                        explanation: "several 表示「幾個、一些」，與可數名詞複數 classmates 連用。One（一個）是單數，Much 和 A little 用於不可數名詞。"
+                    },
+                    {
+                        question: "It was raining heavily when I walked out of the office. I heard the rain ______ the ground loudly.",
+                        options: ["to hit", "hits", "hitting", "and hit"],
+                        answer: 2,
+                        explanation: "hear + 受詞 + V-ing 表示「聽到...正在做某事」，強調動作正在進行。to hit 是不定詞，hits 是現在式，and hit 不符合感官動詞的用法。"
+                    },
+                    {
+                        question: "Simon said that he left his math homework at home. The teacher was angry and made him ______ it again.",
+                        options: ["doing", "to do", "do", "did"],
+                        answer: 2,
+                        explanation: "make + 受詞 + 原形動詞 是使役動詞的用法，表示「使某人做某事」。doing、to do、did 都不符合 make 的用法。"
+                    },
+                    {
+                        question: "Welcome to Lily's birthday party, girls. Help ______ to the drinks and food over there.",
+                        options: ["ourselves", "yourselves", "herself", "themselves"],
+                        answer: 1,
+                        explanation: "Help yourselves 表示「請自便、請隨意取用」，對複數 girls 說話要用 yourselves。ourselves（我們自己）、herself（她自己）、themselves（他們自己）都不符合。"
+                    }
+                ]
+            },
+            7: {
+                title: "第七回測驗",
+                questions: [
+                    {
+                        question: "It doesn't smell good. Let's open the windows and have some ______ air in.",
+                        options: ["convenient", "fresh", "quiet", "different"],
+                        answer: 1,
+                        explanation: "fresh air 表示「新鮮空氣」，味道不好所以要開窗讓新鮮空氣進來。convenient（方便的）、quiet（安靜的）、different（不同的）都不符合。"
+                    },
+                    {
+                        question: "Sandra eats right and exercises very often, so she is always in good ______.",
+                        options: ["future", "date", "health", "experience"],
+                        answer: 2,
+                        explanation: "in good health 表示「健康狀況良好」，吃得對又常運動所以很健康。future（未來）、date（日期）、experience（經驗）都不符合。"
+                    },
+                    {
+                        question: "I got good grades on the important test, and my mom ______ me to a big dinner.",
+                        options: ["treated", "sold", "cooked", "chose"],
+                        answer: 0,
+                        explanation: "treat someone to 表示「請某人、招待某人」，媽媽請我吃大餐慶祝。sold（賣）、cooked（煮）、chose（選擇）都不符合。"
+                    },
+                    {
+                        question: "Will: I'll pick you up at your place at 6:00 p.m. and then we go to the theater together. How does it ______? Clair: Like a good plan.",
+                        options: ["go", "sound", "taste", "work"],
+                        answer: 1,
+                        explanation: "How does it sound? 表示「聽起來如何？」用來徵求意見。go（去）、taste（嚐起來）、work（工作）都不符合這個慣用語。"
+                    },
+                    {
+                        question: "Vicky has a sweet ______. Chocolate is her favorite.",
+                        options: ["lip", "mouth", "tooth", "nose"],
+                        answer: 2,
+                        explanation: "have a sweet tooth 是慣用語，表示「愛吃甜食」。lip（嘴唇）、mouth（嘴巴）、nose（鼻子）都不符合這個慣用語。"
+                    },
+                    {
+                        question: "Claire: We're going to have a new English teacher. She has ______ experience of teaching at least in five schools. Frank: Sounds great!",
+                        options: ["magic", "several", "total", "wide"],
+                        answer: 3,
+                        explanation: "wide experience 表示「廣泛的經驗」，在至少五所學校教過表示經驗豐富。magic（魔法的）、several（幾個）、total（總的）都不符合。"
+                    },
+                    {
+                        question: "Our teachers are all trying their best to help us ______ for the big test. How could we not study harder?",
+                        options: ["count down", "fall behind", "get ready", "watch out"],
+                        answer: 2,
+                        explanation: "get ready for 表示「為...做準備」，老師幫我們準備大考。count down（倒數）、fall behind（落後）、watch out（小心）都不符合。"
+                    },
+                    {
+                        question: "Life is never ______. Please always look on the bright side, and we can be happy all the time.",
+                        options: ["easy", "dark", "sweet", "true"],
+                        answer: 0,
+                        explanation: "Life is never easy 表示「生活從不容易」，但要看光明面。dark（黑暗的）、sweet（甜的）、true（真實的）都不符合語境。"
+                    },
+                    {
+                        question: "He won't hand in the report on time if his sisters ______ him tomorrow afternoon.",
+                        options: ["won't help", "will help", "help", "don't help"],
+                        answer: 3,
+                        explanation: "if 引導條件句用現在簡單式代替未來式，且依句意應該是「不幫忙」才無法準時交報告，所以用 don't help。won't help 和 will help 是未來式不能用，help 是肯定意思不對。"
+                    },
+                    {
+                        question: "I know ______ takes time for the two young men to run a big business here.",
+                        options: ["that", "this", "it", "they"],
+                        answer: 2,
+                        explanation: "It takes time for someone to V 是固定句型，it 是虛主詞，真正的主詞是後面的不定詞片語。that、this、they 都不能當虛主詞。"
+                    },
+                    {
+                        question: "Sandy usually ______ to work by bus, but now she is going by train.",
+                        options: ["was going", "went", "is going", "goes"],
+                        answer: 3,
+                        explanation: "usually 表示習慣，要用現在簡單式 goes；後半句 now 才用現在進行式 is going 表示現在的狀況。was going（過去進行式）、went（過去式）、is going 都不符合 usually 的時態。"
+                    },
+                    {
+                        question: "It's getting cold. ______ to put on your jacket before going out.",
+                        options: ["Remember", "To remember", "Remembering", "Remembers"],
+                        answer: 0,
+                        explanation: "祈使句用原形動詞開頭，Remember to V 表示「記得要做某事」。To remember（不定詞）、Remembering（動名詞）、Remembers（第三人稱單數）都不符合祈使句的用法。"
+                    },
+                    {
+                        question: "At the end of the year, Jasmine will ______ gifts to her friends and wish them a happy new year.",
+                        options: ["buy", "make", "send", "get"],
+                        answer: 2,
+                        explanation: "send gifts to someone 表示「寄送禮物給某人」。buy（買）、make（製作）、get（得到）在語意上都不如 send 適合「送禮」的情境。"
+                    },
+                    {
+                        question: "Jay: ______ sugar should I put into the cup? James: Just a spoon.",
+                        options: ["How often", "How long", "How many", "How much"],
+                        answer: 3,
+                        explanation: "How much 用於詢問不可數名詞的量，sugar（糖）是不可數名詞。How often（多常）、How long（多久）、How many（多少，用於可數）都不符合。"
+                    },
+                    {
+                        question: "Marsha: Take good care of yourself. Have a safe trip! Nick: I ______. Don't worry!",
+                        options: ["am", "do", "have", "will"],
+                        answer: 3,
+                        explanation: "will 代替前面的 will take good care of myself，表示「我會的」。am、do、have 都不能代替未來式的動詞片語。"
+                    },
+                    {
+                        question: "Ted: ______ have snow in winter? Meg: Yeah, in most parts of the country.",
+                        options: ["Do you", "Does it", "Is there", "Will there"],
+                        answer: 1,
+                        explanation: "詢問天氣狀況用 it 當虛主詞，Does it snow 表示「會下雪嗎」。Do you（你）、Is there（有）、Will there（將有）都不符合詢問天氣的用法。"
+                    },
+                    {
+                        question: "Fred: How did the job interview go? Sam: I guess I blew it. Fred: Hey, don't worry about ______. Let's go out and have some fun.",
+                        options: ["that", "one", "those", "another"],
+                        answer: 0,
+                        explanation: "that 代替前面提到的事情（job interview），worry about that 表示「別擔心那件事」。one 代替可數名詞，those 是複數，another 表示「另一個」，都不符合。"
+                    },
+                    {
+                        question: "If you look (看事情) ______ than before, you'll find something different around you.",
+                        options: ["careful", "carefully", "more careful", "more carefully"],
+                        answer: 3,
+                        explanation: "look 在此是「看」的動詞，要用副詞 carefully 修飾；than 表示比較，所以要用比較級 more carefully。careful 是形容詞，more careful 是形容詞比較級，都不能修飾動詞。"
+                    }
+                ]
+            }
+        };
+    </script>
+</body>
+</html>
