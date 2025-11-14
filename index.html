@@ -597,17 +597,22 @@
             }
         }
         
-        async function displayStudentProgress(studentName) {
-            const snapshot = await database.ref(`quizData/${studentName}`).once('value');
-            const studentData = snapshot.val() || {};
-            const progressDiv = document.getElementById('progressContent');
-            
-            let completedCount = 0;
-            let completedList = [];
-            let notCompletedList = [];
-            
-            for (let i = 1; i <= 7; i++) {
-                if (allQuizzes[i]) {
+       async function displayStudentProgress(studentName) {
+            try {
+                const snapshot = await database.ref(`quizData/${studentName}`).once('value');
+                const studentData = snapshot.val() || {};
+                const progressDiv = document.getElementById('progressContent');
+                
+                if (!progressDiv) {
+                    console.error('Progress div not found');
+                    return;
+                }
+                
+                let completedCount = 0;
+                let completedList = [];
+                let notCompletedList = [];
+                
+                for (let i = 1; i <= 7; i++) {
                     if (studentData[i]) {
                         completedCount++;
                         completedList.push(`<span style="color: #28a745; font-weight: bold;">第 ${i} 回 ✓ (${studentData[i].score}分)</span>`);
@@ -615,58 +620,68 @@
                         notCompletedList.push(`<span style="color: #6c757d;">第 ${i} 回</span>`);
                     }
                 }
-            }
-            
-            let html = `
-                <div style="margin-bottom: 15px;">
-                    <strong style="font-size: 18px; color: #667eea;">總進度：${completedCount} / 7 回</strong>
-                    <div style="background: #e9ecef; height: 20px; border-radius: 10px; margin-top: 8px; overflow: hidden;">
-                        <div style="background: linear-gradient(90deg, #667eea, #764ba2); height: 100%; width: ${(completedCount/7)*100}%; transition: width 0.3s;"></div>
-                    </div>
-                </div>
-            `;
-            
-            if (completedList.length > 0) {
-                html += `
-                    <div style="margin: 15px 0;">
-                        <strong style="color: #28a745;">✅ 已完成：</strong><br>
-                        <div style="margin-top: 8px; display: flex; flex-wrap: wrap; gap: 10px;">
-                            ${completedList.join('')}
-                        </div>
-                    </div>
-                `;
-            }
-            
-            if (notCompletedList.length > 0) {
-                html += `
-                    <div style="margin: 15px 0;">
-                        <strong style="color: #667eea;">📝 尚未完成：</strong><br>
-                        <div style="margin-top: 8px; display: flex; flex-wrap: wrap; gap: 10px;">
-                            ${notCompletedList.join('')}
+                
+                let html = `
+                    <div style="margin-bottom: 15px;">
+                        <strong style="font-size: 18px; color: #667eea;">總進度：${completedCount} / 7 回</strong>
+                        <div style="background: #e9ecef; height: 20px; border-radius: 10px; margin-top: 8px; overflow: hidden;">
+                            <div style="background: linear-gradient(90deg, #667eea, #764ba2); height: 100%; width: ${(completedCount/7)*100}%; transition: width 0.3s;"></div>
                         </div>
                     </div>
                 `;
                 
-                const nextQuiz = completedCount + 1;
-                if (nextQuiz && nextQuiz <= 7) {
+                if (completedList.length > 0) {
                     html += `
-                        <div style="background: #fff3cd; padding: 12px; border-radius: 8px; margin-top: 15px; border: 2px solid #ffc107;">
-                            <strong style="color: #856404;">💡 建議：</strong>
-                            <span style="color: #856404;">從「第 ${nextQuiz} 回」開始作答</span>
+                        <div style="margin: 15px 0;">
+                            <strong style="color: #28a745;">✅ 已完成：</strong><br>
+                            <div style="margin-top: 8px; display: flex; flex-wrap: wrap; gap: 10px;">
+                                ${completedList.join('')}
+                            </div>
                         </div>
                     `;
                 }
-            } else {
-                html += `
-                    <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center;">
-                        <strong style="color: #155724; font-size: 18px;">🎉 恭喜！已完成所有測驗！</strong>
-                        <p style="color: #155724; margin-top: 8px;">你可以重新作答來複習喔</p>
-                    </div>
-                `;
+                
+                if (notCompletedList.length > 0) {
+                    html += `
+                        <div style="margin: 15px 0;">
+                            <strong style="color: #667eea;">📝 尚未完成：</strong><br>
+                            <div style="margin-top: 8px; display: flex; flex-wrap: wrap; gap: 10px;">
+                                ${notCompletedList.join('')}
+                            </div>
+                        </div>
+                    `;
+                    
+                    const nextQuiz = completedCount + 1;
+                    if (nextQuiz && nextQuiz <= 7) {
+                        html += `
+                            <div style="background: #fff3cd; padding: 12px; border-radius: 8px; margin-top: 15px; border: 2px solid #ffc107;">
+                                <strong style="color: #856404;">💡 建議：</strong>
+                                <span style="color: #856404;">從「第 ${nextQuiz} 回」開始作答</span>
+                            </div>
+                        `;
+                    }
+                } else {
+                    html += `
+                        <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center;">
+                            <strong style="color: #155724; font-size: 18px;">🎉 恭喜！已完成所有測驗！</strong>
+                            <p style="color: #155724; margin-top: 8px;">你可以重新作答來複習喔</p>
+                        </div>
+                    `;
+                }
+                
+                progressDiv.innerHTML = html;
+                await populateQuizSelect();
+            } catch (error) {
+                console.error('Error displaying progress:', error);
+                const progressDiv = document.getElementById('progressDiv');
+                if (progressDiv) {
+                    progressDiv.innerHTML = `
+                        <div style="color: #dc3545; padding: 15px;">
+                            ⚠️ 載入進度時發生錯誤，請重新整理頁面
+                        </div>
+                    `;
+                }
             }
-            
-            progressDiv.innerHTML = html;
-            await populateQuizSelect();
         }
 
         function startQuiz() {
